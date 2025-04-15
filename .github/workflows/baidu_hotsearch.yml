@@ -34,3 +34,13 @@ jobs:
         git add baidu_hotsearch.json bing.js requirements.txt
         git commit -m "Update baidu hotsearch data [skip ci]" || echo "No changes to commit"
         git push https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git
+
+    - name: Clean up old workflow runs (keep last 3)
+      if: always()
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh api -X GET /repos/${{ github.repository }}/actions/runs \
+          --paginate -F per_page=100 | \
+          jq '.workflow_runs | .[3:] | .[] | .id' | \
+          xargs -I {} gh api -X DELETE /repos/${{ github.repository }}/actions/runs/{}

@@ -8,6 +8,7 @@
 // @license      GNU GPLv3
 // @icon         https://www.bing.com/favicon.ico
 // @connect      gumengya.com
+// @updateURL    https://raw.githubusercontent.com/yanlz84/bing-auto-search/refs/heads/master/bing.js?t=
 // @run-at       document-end
 // @grant        GM_registerMenuCommand
 // @grant        GM_addStyle

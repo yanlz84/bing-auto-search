@@ -1,0 +1,32 @@
+name: Update Baidu Hotsearch
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC时间0点运行(北京时间8点)
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+      
+    - name: Run hotsearch script
+      run: python get_baidu_hotsearch.py
+      
+    - name: Commit changes
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add baidu_hotsearch.json bing.js
+        git commit -m "Update baidu hotsearch data [skip ci]" || echo "No changes to commit"
+        git push

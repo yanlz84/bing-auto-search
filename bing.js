@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bing自动搜索脚本
-// @version      V3.1.6(2025-4-16)
+// @version      V3.1.6
 // @description  自动搜索脚本
 // @author       怀沙2049
 // @match        https://*.bing.com/*

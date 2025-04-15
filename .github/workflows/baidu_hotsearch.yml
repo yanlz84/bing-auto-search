@@ -24,9 +24,11 @@ jobs:
       run: python get_baidu_hotsearch.py
       
     - name: Commit changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git add baidu_hotsearch.json bing.js
         git commit -m "Update baidu hotsearch data [skip ci]" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git

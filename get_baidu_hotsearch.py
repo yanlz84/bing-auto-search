@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 def get_baidu_hotsearch():
     url = "https://top.baidu.com/board?tab=realtime"
@@ -21,12 +22,23 @@ def get_baidu_hotsearch():
         with open('baidu_hotsearch.json', 'w', encoding='utf-8') as f:
             json.dump(titles, f, ensure_ascii=False, indent=2)
             
-        # 更新bing.js中的搜索词
+        # 更新bing.js中的搜索词和版本号
         with open('bing.js', 'r', encoding='utf-8') as f:
             js_content = f.read()
             
+        # 提取并更新版本号
+        version_match = re.search(r'@version\s+V(\d+)\.(\d+)\.(\d+)', js_content)
+        if version_match:
+            major, minor, patch = map(int, version_match.groups())
+            new_patch = patch + 1
+            new_version = f"V{major}.{minor}.{new_patch}"
+            js_content = re.sub(
+                r'(@version\s+)V\d+\.\d+\.\d+',
+                f'\\g<1>{new_version}',
+                js_content
+            )
+            
         # 提取原default_search_words数组
-        import re
         old_array_match = re.search(r'var default_search_words = (\[.*?\])', js_content)
         if old_array_match:
             old_array_str = old_array_match.group(1)

@@ -7,7 +7,6 @@
 // @exclude      https://rewards.bing.com/*
 // @license      GNU GPLv3
 // @icon         https://www.bing.com/favicon.ico
-// @connect      gumengya.com
 // @downloadURL  https://raw.githubusercontent.com/yanlz84/bing-auto-search/refs/heads/master/bing.js?t=
 // @updateURL    https://raw.githubusercontent.com/yanlz84/bing-auto-search/refs/heads/master/bing.js?t=
 // @run-at       document-end
@@ -23,8 +22,6 @@ var max_rewards = 40; //重复执行的次数
 //每执行4次搜索后插入暂停时间,解决账号被监控不增加积分的问题
 var pause_time = 9; // 暂停时长建议为16分钟,也就是960000(60000毫秒=1分钟)
 var search_words = []; //搜索词
-var appkey = "";//从https://www.gmya.net/api 网站申请的热门词接口APIKEY
-var Hot_words_apis = "https://api.gmya.net/Api/";// 故梦热门词API接口网站
 
 
 //默认搜索词，热门搜索词请求失败时使用

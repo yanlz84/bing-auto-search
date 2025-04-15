@@ -8,3 +8,7 @@
 - 许可证：GNU GPLv3
 
 本脚本修改自怀沙2049的原版脚本，加入了自动获取百度热搜作为搜索词的功能。
+
+## 许可证
+本项目基于 GNU General Public License v3.0 开源许可证进行分发。
+详细信息请参见 [LICENSE](LICENSE) 文件。

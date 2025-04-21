@@ -20,7 +20,7 @@
 
 var max_rewards = 50; //重复执行的次数
 //每执行4次搜索后插入暂停时间,解决账号被监控不增加积分的问题
-var pause_time = 9; // 暂停时长建议为16分钟,也就是960000(60000毫秒=1分钟)
+var pause_time = 5000; // 暂停时长建议为16分钟,也就是960000(60000毫秒=1分钟)
 var search_words = []; //搜索词
 
 
@@ -97,14 +97,9 @@ function exec() {
         setTimeout(function () {
             let nowtxt = search_words[currentSearchCount]; // 获取当前搜索词
             nowtxt = AutoStrTrans(nowtxt); // 对搜索词进行替换
-            // 检查是否需要暂停
-            if ((currentSearchCount + 1) % 5 === 0) {
-                setTimeout(function () {
-                    location.href = "https://www.bing.com/search?q=" + encodeURI(nowtxt) + "&form=" + randomString + "&cvid=" + randomCvid; // 在Bing搜索引擎中搜索
-                }, pause_time);
-            } else {
+            setTimeout(function () {
                 location.href = "https://www.bing.com/search?q=" + encodeURI(nowtxt) + "&form=" + randomString + "&cvid=" + randomCvid; // 在Bing搜索引擎中搜索
-            }
+            }, pause_time);
         }, randomDelay);
     } else if (currentSearchCount > max_rewards / 2 && currentSearchCount < max_rewards) {
         let tt = document.getElementsByTagName("title")[0];
@@ -115,14 +110,9 @@ function exec() {
         setTimeout(function () {
             let nowtxt = search_words[currentSearchCount]; // 获取当前搜索词
             nowtxt = AutoStrTrans(nowtxt); // 对搜索词进行替换
-            // 检查是否需要暂停
-            if ((currentSearchCount + 1) % 5 === 0) {
-                setTimeout(function () {
-                    location.href = "https://cn.bing.com/search?q=" + encodeURI(nowtxt) + "&form=" + randomString + "&cvid=" + randomCvid; // 在Bing搜索引擎中搜索
-                }, pause_time);
-            } else {
+            setTimeout(function () {
                 location.href = "https://cn.bing.com/search?q=" + encodeURI(nowtxt) + "&form=" + randomString + "&cvid=" + randomCvid; // 在Bing搜索引擎中搜索
-            }
+            }, pause_time);
         }, randomDelay);
     }
     // 实现平滑滚动到页面底部的函数

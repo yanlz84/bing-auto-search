@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bing自动搜索脚本
-// @version      V3.1.28
+// @version      V3.1.1
 // @description  自动搜索脚本
 // @author       怀沙2049
 // @match        https://*.bing.com/*
@@ -18,7 +18,7 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-var max_rewards = 50; //重复执行的次数
+var max_rewards = 40; //重复执行的次数
 //每执行4次搜索后插入暂停时间,解决账号被监控不增加积分的问题
 var pause_time = 5000; // 暂停时长建议为16分钟,也就是960000(60000毫秒=1分钟)
 var search_words = []; //搜索词
@@ -76,7 +76,7 @@ function generateRandomString(length) {
 
 function exec() {
     // 生成随机延迟时间
-    let randomDelay = Math.floor(Math.random() * 20000) + 10000; // 生成10秒到30秒之间的随机数
+    let randomDelay = Math.floor(Math.random() * 20000) + 5000; // 生成5秒到25秒之间的随机数
     let randomString = generateRandomString(4); //生成4个长度的随机字符串
     let randomCvid = generateRandomString(32); //生成32位长度的cvid
     'use strict';

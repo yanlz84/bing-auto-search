@@ -1,0 +1,60 @@
+name: Update Google Trends
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # 每12小时运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: true
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip chromium-browser chromium-chromedriver jq
+
+    - name: Install GitHub CLI (gh)
+      run: |
+        type -p curl >/dev/null || sudo apt install curl -y
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh -y
+
+    - name: Install requirements
+      run: pip install -r requirements.txt
+
+    - name: Run Google Trends script
+      run: python get_google_trends.py
+
+    - name: Commit changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add google_trends.json google.js requirements.txt
+        git commit -m "Update Google trends data [skip ci]" || echo "No changes to commit"
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git
+
+    - name: Clean up old workflow runs (keep last 3)
+      if: always()
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh api -X GET /repos/${{ github.repository }}/actions/runs \
+          --paginate -F per_page=100 | \
+          jq '.workflow_runs | .[3:] | .[] | .id' | \
+          xargs -I {} gh api -X DELETE /repos/${{ github.repository }}/actions/runs/{}
